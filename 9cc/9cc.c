@@ -24,7 +24,7 @@ struct Token
   Token *next;    // Next token
   int val;        // If kind is TK_NUM, its value
   char *str;      // Token string
-  int len;        // token length
+  int len;        // Token length
 };
 
 // Input program
@@ -71,7 +71,7 @@ bool consume(char *op)
 // Ensure that the current token is `op`.
 void expect(char *op)
 {
-  if (token->kind != TK_RESERVED || tstrlen(op) != token->len ||
+  if (token->kind != TK_RESERVED || strlen(op) != token->len ||
       memcmp(token->str, op, token->len))
     error_at(token->str, "expected \"%s\"", op);
   token = token->next;
@@ -134,7 +134,7 @@ Token *tokenize()
       continue;
     }
 
-    // String-letter punctuator
+    // Single-letter punctuator
     if (strchr("+-*/()<>", *p))
     {
       cur = new_token(TK_RESERVED, cur, p++, 1);
@@ -221,7 +221,7 @@ Node *expr()
   return equality();
 }
 
-// equality = relationa; ("==" relational | "!=" relatioinal)*
+// equality = relational ("==" relational | "!=" relational)*
 Node *equality()
 {
   Node *node = relational();
@@ -237,7 +237,7 @@ Node *equality()
   }
 }
 
-// relational = add("<" add | "<=" add | ">" add | ">=" add)*
+// relational = add ("<" add | "<=" add | ">" add | ">=" add)*
 Node *relational()
 {
   Node *node = add();
@@ -257,7 +257,7 @@ Node *relational()
   }
 }
 
-// add = mul("+" mul | "-" mul)*
+// add = mul ("+" mul | "-" mul)*
 Node *add()
 {
   Node *node = mul();
@@ -289,7 +289,7 @@ Node *mul()
   }
 }
 
-// unary = ("+" | "-") ? unary
+// unary = ("+" | "-")? unary
 //       | primary
 Node *unary()
 {
@@ -366,7 +366,7 @@ void gen(Node *node)
     printf("  setle al\n");
     printf("  movzb rax, al\n");
     break;
-    }
+  }
 
   printf("  push rax\n");
 }

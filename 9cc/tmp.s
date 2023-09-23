@@ -1,5 +1,6 @@
 .intel_syntax noprefix
-.globl main
+.global main
 main:
-  mov rax, 1
+  push 0
+  pop rax
   ret
